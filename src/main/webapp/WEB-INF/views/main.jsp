@@ -31,7 +31,7 @@
 
     <form id='form' action='<c:url value="/app/csrf"/>' method='POST'>
 
-        <input id='do-not-share-your-token-with-anyone' type='hidden' name='MY-CSRF-TOKEN' value=''>
+        <input id='do-not-share-your-token-with-anyone' type='hidden' name='MY-CSRF-TOKEN' value='default'>
         <button class="btn btn-success btn-lg" onclick="sendRequest(); return false;">Send</button>
 
     </form>

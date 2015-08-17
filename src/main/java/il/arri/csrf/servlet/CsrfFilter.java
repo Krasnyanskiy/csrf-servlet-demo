@@ -1,6 +1,7 @@
 package il.arri.csrf.servlet;
 
 import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -10,28 +11,43 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import static java.lang.String.format;
+
 /**
  * @author Alexander Krasnyanskiy
  */
+@Log
 public class CsrfFilter implements Filter {
 
     @SneakyThrows
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) {
+
+
         if (!((HttpServletRequest) req).getSession().isNew()) {
             //
             // We are here only if the client knows about the session
             //
             Cookie[] cookies = ((HttpServletRequest) req).getCookies();
             if (cookies != null) {
-                String tokenFromCookies = findCookieValue(cookies, "MY-CSRF-TOKEN");
+                //
+                // Get a secret token value
+                //
+                String tokenFromCookies = findCookieValue(cookies, "MY_CSRF_TOKEN");
+                log.info(format("Cookies token: [%s]", tokenFromCookies));
                 if (tokenFromCookies != null) {
-                    String tokenFromHeader = req.getParameter("MY-CSRF-TOKEN");
-                    if (tokenFromHeader == null || !tokenFromHeader.equals(tokenFromCookies)) {
+                    //
+                    // Retrieve a hidden parameter from request
+                    //
+                    String tokenFromRequest = req.getParameter("MY_CSRF_TOKEN");
+                    log.info(format("Request token: [%s]", tokenFromRequest));
+
+                    if (tokenFromRequest == null || !tokenFromRequest.equals(tokenFromCookies)) {
                         req.getRequestDispatcher("/WEB-INF/views/busted.jsp").forward(req, resp);
                     }
                 }
             }
         }
+
 
         chain.doFilter(req, resp);
     }

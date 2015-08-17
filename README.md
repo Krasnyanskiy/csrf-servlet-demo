@@ -6,4 +6,4 @@ A simple web app which demonstrates how to protect your site from CSRF attacks w
 
 1. Start the server on Tomcat.
 2. Press `Send` button and check the console.
-3. Run malicious script on jsFiddle and check the console again.
+3. Run malicious [script](http://jsfiddle.net/krasnyanskiy/33tw4wnj) on jsFiddle and check the console again.

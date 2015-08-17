@@ -23,13 +23,13 @@
     </div>
 
     <p class="lead">To send request to the server, please follow
-        <a href="<c:url value="/app/csrf"/>">the link</a>. Or we can also send a request using JavaScript.
+        <a href="<c:url value="/demo"/>">the link</a>. Or we can also send a request using JavaScript.
     </p>
 
 
     <%-- Simple form --%>
 
-    <form id='form' action='<c:url value="/app/csrf"/>' method='POST'>
+    <form id='form' action='<c:url value="/demo"/>' method='POST'>
 
         <input id='do-not-share-your-token-with-anyone' type='hidden' name='MY-CSRF-TOKEN' value='default'>
         <button class="btn btn-success btn-lg" onclick="sendRequest(); return false;">Send</button>

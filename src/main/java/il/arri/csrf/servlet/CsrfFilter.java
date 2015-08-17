@@ -10,9 +10,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import static java.lang.System.err;
-import static java.lang.System.out;
-
 /**
  * @author Alexander Krasnyanskiy
  */
@@ -20,7 +17,9 @@ public class CsrfFilter implements Filter {
 
     @SneakyThrows
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) {
-
+        //
+        //if the client knows about the session
+        //
         if (!((HttpServletRequest) req).getSession().isNew()) {
             Cookie[] cookies = ((HttpServletRequest) req).getCookies();
             if (cookies != null) {
@@ -33,12 +32,12 @@ public class CsrfFilter implements Filter {
                     String tokenFromHeader = req.getParameter("MY-CSRF-TOKEN");
 
                     if (tokenFromHeader == null || !tokenFromHeader.equals(tokenFromCookies)) {
-                        err.printf("Go away, dirty hacker! %n[cookies_token=%s, request_token=%s]%n", tokenFromCookies, tokenFromHeader);
+                        //err.printf("Go away, dirty hacker! %n[cookies_token=%s, request_token=%s]%n", tokenFromCookies, tokenFromHeader);
                         req.getRequestDispatcher("/WEB-INF/views/busted.jsp").forward(req, resp);
                     }
 
-                    out.println("Matched! (cookies token is the same as request token)");
-                    req.getRequestDispatcher("/WEB-INF/views/bingo.jsp").forward(req, resp);
+                    //out.println("Matched! (cookies token is the same as request token)");
+                    //req.getRequestDispatcher("/WEB-INF/views/bingo.jsp").forward(req, resp);
                 }
             }
         }

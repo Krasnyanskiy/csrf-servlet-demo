@@ -17,27 +17,18 @@ public class CsrfFilter implements Filter {
 
     @SneakyThrows
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) {
-        //
-        //if the client knows about the session
-        //
         if (!((HttpServletRequest) req).getSession().isNew()) {
+            //
+            // We are here only if the client knows about the session
+            //
             Cookie[] cookies = ((HttpServletRequest) req).getCookies();
             if (cookies != null) {
                 String tokenFromCookies = findCookieValue(cookies, "MY-CSRF-TOKEN");
                 if (tokenFromCookies != null) {
-
-                    //String tokenFromHeader
-                    // = ((HttpServletRequest) req).getHeader("My-CSRF-TOKEN");
-
                     String tokenFromHeader = req.getParameter("MY-CSRF-TOKEN");
-
                     if (tokenFromHeader == null || !tokenFromHeader.equals(tokenFromCookies)) {
-                        //err.printf("Go away, dirty hacker! %n[cookies_token=%s, request_token=%s]%n", tokenFromCookies, tokenFromHeader);
                         req.getRequestDispatcher("/WEB-INF/views/busted.jsp").forward(req, resp);
                     }
-
-                    //out.println("Matched! (cookies token is the same as request token)");
-                    //req.getRequestDispatcher("/WEB-INF/views/bingo.jsp").forward(req, resp);
                 }
             }
         }
@@ -45,9 +36,9 @@ public class CsrfFilter implements Filter {
         chain.doFilter(req, resp);
     }
 
-    private String findCookieValue(Cookie[] cookies, String key) {
+    private String findCookieValue(Cookie[] cookies, String csrfKey) {
         for (Cookie cookie : cookies)
-            if (key.equals(cookie.getName()))
+            if (csrfKey.equals(cookie.getName()))
                 return cookie.getValue();
 
         return null;
